@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="configurator" id="configurator">
+        <div class="configurator__title">Конфигуратор Tesla Model X</div>
+        <div class="configurator__tabs">
+            <div class="configurator__tab" v-for="(step, index) in steps" :key="index" :class="{'isActive': step.isActive, 'isCompleated': step.isCompleated}">
+                <div class="number">{{ index+1 }}</div>
+                <div class="text">{{ step.name }}</div>
+            </div>
+        </div>
+        <div class="configurator__screens">
+            <div class="configurator__container">
+                <div class="configurator__screen">
+                    <div class="configurator__screen-left">
+                        <div class="configurator__screen-media">
+                            <img src="/images/step1.png" width="100%" alt="">
+                        </div>
+                        <div class="configurator__screen-params">
+                            <div class="configurator__screen-param" v-for="(param, key) in params" :key="key">
+                                <div class="title">{{ param.range }} {{ param.measuring }}</div>
+                                <div class="name">{{ param.title }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="configurator__screen-right">
+                        <div class="configurator__form">
+                            <div class="configurator__form-top">
+                                <div class="configurator__form-items">
+                                    <div class="configurator__form-item">
+                                        <div class="configurator__form-item_title">Выберите модель</div>
+                                        <div class="configurator__form-item_fields">
+                                            <div class="configurator__form-item_field">
+                                                <select name="" id="">
+                                                    <option value="0">Tesla Model X</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="configurator__form-item">
+                                        <div class="configurator__form-item_title">Выберите модель</div>
+                                        <div class="configurator__form-item_fields">
+                                            <div class="configurator__form-item_field">
+                                                <select name="" id="">
+                                                    <option value="0">Tesla Model X</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="configurator__form-bottom">
+                                 <button class="configurator__form-button configurator__button">
+                                    <div class="text">Продолжить</div>
+                                    <div class="arrow">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 10 11" fill="none">
+                                            <path d="M7.94141 5.94141C8.18555 5.69727 8.18555 5.30078 7.94141 5.05664L4.19141 1.30664C3.94727 1.0625 3.55078 1.0625 3.30664 1.30664C3.0625 1.55078 3.0625 1.94727 3.30664 2.19141L6.61523 5.5L3.30859 8.80859C3.06445 9.05273 3.06445 9.44922 3.30859 9.69336C3.55273 9.9375 3.94922 9.9375 4.19336 9.69336L7.94336 5.94336L7.94141 5.94141Z" fill="white"/>
+                                        </svg>
+                                    </div>
+                                 </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
+    <script src="./configurator.js"></script>
+</body>
+</html>
