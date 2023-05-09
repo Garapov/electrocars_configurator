@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="./styles.css">
+    <script src="http://localhost:8098"></script>
 </head>
 <body>
     <div class="configurator" id="configurator">
-        <div class="configurator__title">Конфигуратор Tesla Model X</div>
+        <div class="configurator__title">Конфигуратор {{ computedModel.name }}</div>
         <div class="configurator__tabs">
             <div class="configurator__tab" v-for="(step, index) in steps" :key="index" :class="{'isActive': step.isActive, 'isCompleated': step.isCompleated}">
                 <div class="number">{{ index+1 }}</div>
@@ -19,45 +20,89 @@
         <div class="configurator__screens">
             <div class="configurator__container">
                 <div class="configurator__screen">
-                    <div class="configurator__screen-left">
+                    <!-- Left side screens -->
+                    <div class="configurator__screen-left" v-show="curentStepIndex == 0">
                         <div class="configurator__screen-media">
-                            <img src="/images/step1.png" width="100%" alt="">
+                            <img :src="`/images/models/tesla-${selectedModelKey}.jpeg`" width="100%" alt="">
                         </div>
                         <div class="configurator__screen-params">
-                            <div class="configurator__screen-param" v-for="(param, key) in params" :key="key">
+                            <div class="configurator__screen-param" v-for="(param, key) in computedComplect.params" :key="key">
                                 <div class="title">{{ param.range }} {{ param.measuring }}</div>
                                 <div class="name">{{ param.title }}</div>
                             </div>
                         </div>
                     </div>
+                    <div class="configurator__screen-left" v-show="curentStepIndex == 1">
+                        2
+                    </div>
+                    <div class="configurator__screen-left" v-show="curentStepIndex == 2">
+                        3
+                    </div>
+                    <div class="configurator__screen-left" v-show="curentStepIndex == 3">
+                        4
+                    </div>
+                    <div class="configurator__screen-left" v-show="curentStepIndex == 4">
+                        5
+                    </div>
+                    <!-- Left side screens end -->
                     <div class="configurator__screen-right">
                         <div class="configurator__form">
-                            <div class="configurator__form-top">
+                            <!-- Right side screens -->
+                            <div class="configurator__form-top" v-show="curentStepIndex == 0">
                                 <div class="configurator__form-items">
                                     <div class="configurator__form-item">
                                         <div class="configurator__form-item_title">Выберите модель</div>
                                         <div class="configurator__form-item_fields">
                                             <div class="configurator__form-item_field">
-                                                <select name="" id="">
-                                                    <option value="0">Tesla Model X</option>
+                                                <select v-model="selectedModelKey">
+                                                    <option v-for="model in models" :value="model.key" :key="model.key">{{ model.name }}</option>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="configurator__form-item">
-                                        <div class="configurator__form-item_title">Выберите модель</div>
+                                        <div class="configurator__form-item_title">Выберите комплектацию</div>
                                         <div class="configurator__form-item_fields">
-                                            <div class="configurator__form-item_field">
-                                                <select name="" id="">
-                                                    <option value="0">Tesla Model X</option>
-                                                </select>
+                                            <div class="configurator__form-item_field" v-for="complect in computedModel.complects.items" :key="complect.key">
+                                                <label class="configurator__form-item_complect">
+                                                    <input type="radio" name="selectedComplect" :value="complect.key" v-model="computedModel.complects.selected">
+                                                    <div class="configurator__form-item_complect_in">
+                                                        <div class="name">{{ complect.name }}</div>
+                                                        <div class="price">{{ complect.price }}</div>
+                                                    </div>
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="configurator__form-top" v-show="curentStepIndex == 1">
+                                <div class="configurator__form-items">
+                                    <div class="configurator__form-item configurator__form-item--colors">
+                                        <div class="configurator__form-item_title">Выберите цвет автомобиля</div>
+                                        <div class="configurator__form-item_colors">
+                                            <label class="configurator__form-item_color" v-for="color in computedModel.colors.items" :key="color.id">
+                                                <input type="radio" name="color" :value="color.id" v-model="computedModel.colors.selected">
+                                                <div class="color" :style="`--color: ${color.code};`"></div>
+                                            </label>
+                                        </div>
+                                        <div class="configurator__form-item_color_name">
+                                            <div class="left">
+                                                {{computedModel.colors.items[computedModel.colors.selected].name}}
+                                            </div>
+                                            <div class="right">
+                                                {{computedModel.colors.items[computedModel.colors.selected].price}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Right side screens end -->
                             <div class="configurator__form-bottom">
-                                 <button class="configurator__form-button configurator__button">
+                                <button class="configurator__form-button configurator__button configurator__button--outlined configurator__button--back" v-if="curentStepIndex > 0" @click.prevent="prevStep">
+                                    <div class="text">Назад</div>
+                                 </button>
+                                 <button class="configurator__form-button configurator__button" @click.prevent="nextStep">
                                     <div class="text">Продолжить</div>
                                     <div class="arrow">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 10 11" fill="none">
