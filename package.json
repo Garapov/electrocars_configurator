@@ -4,7 +4,8 @@
   "description": "",
   "main": "configurator.js",
   "scripts": {
-    "dev": "node-sass --watch ./ -o ./"
+    "dev": "node-sass --watch ./ -o ./",
+    "build": "node-sass ./ -o ./"
   },
   "author": "",
   "license": "ISC",

@@ -23,7 +23,7 @@
                     <!-- Left side screens -->
                     <div class="configurator__screen-left" v-show="curentStepIndex == 0">
                         <div class="configurator__screen-media">
-                            <img :src="`/images/models/tesla-${selectedModelKey}.jpeg`" width="100%" alt="">
+                            <img :src="`/images/models/tesla-${selectedModelKey}-${computedModel.colors.items[computedModel.colors.selected].prefix}-${computedModel.rims.items[computedModel.rims.selected].radius}.jpg`" width="100%" alt="">
                         </div>
                         <div class="configurator__screen-params">
                             <div class="configurator__screen-param" v-for="(param, key) in computedComplect.params" :key="key">
@@ -33,16 +33,67 @@
                         </div>
                     </div>
                     <div class="configurator__screen-left" v-show="curentStepIndex == 1">
-                        2
+                        <div class="configurator__screen-media">
+                            <img :src="`/images/models/tesla-${selectedModelKey}-${computedModel.colors.items[computedModel.colors.selected].prefix}-${computedModel.rims.items[computedModel.rims.selected].radius}.jpg`" width="100%" alt="">
+                        </div>
                     </div>
                     <div class="configurator__screen-left" v-show="curentStepIndex == 2">
-                        3
+                        <div class="configurator__screen-salon">
+                            <img :src="`/images/salons/${selectedModelKey}-${computedModel.salons.items[computedModel.salons.selected].prefix}.jpg`" width="100%" alt="">
+                        </div>
                     </div>
-                    <div class="configurator__screen-left" v-show="curentStepIndex == 3">
-                        4
+                    <div class="configurator__screen-left glide" v-show="curentStepIndex == 3">
+                        <div class="configurator__screen-slider glide__track" data-glide-el="track">
+                            <div class="glide__slides">
+                                <div class="glide__slide">
+                                    <video autoplay="" loop="" muted="" playsinline="" width="100%">
+                                        <source src="./images/autopilot/video-1.mp4" type="video/mp4; codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
+                                    </video>
+                                </div>
+                                <div class="glide__slide">
+                                    <video autoplay="" loop="" muted="" playsinline="" width="100%">
+                                        <source src="./images/autopilot/video-2.mp4" type="video/mp4; codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
+                                    </video>
+                                </div>
+                                <div class="glide__slide">
+                                    <video autoplay="" loop="" muted="" playsinline="" width="100%">
+                                        <source src="./images/autopilot/video-3.mp4" type="video/mp4; codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
+                                    </video>
+                                </div>
+                                <div class="glide__slide">
+                                    <video autoplay="" loop="" muted="" playsinline="" width="100%">
+                                        <source src="./images/autopilot/video-4.mp4" type="video/mp4; codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
+                                    </video>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="glide__arrows" data-glide-el="controls">
+                            <button class="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
+                            <button class="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
+                        </div>
                     </div>
                     <div class="configurator__screen-left" v-show="curentStepIndex == 4">
-                        5
+                        <form action="" class="wpcf7-form" @submit.prevent="sendForm">
+                            <label class="configurator__screen-form-field">
+                                <div class="name">Имя</div>
+                                <input type="text" placeholder="Имя">
+                            </label>
+                            <label class="configurator__screen-form-field">
+                                <div class="name">Фамилия</div>
+                                <input type="text" placeholder="Фамилия">
+                            </label>
+                            <label class="configurator__screen-form-field">
+                                <div class="name">Адрес электронной почты</div>
+                                <input type="email" placeholder="Адрес электронной почты">
+                            </label>
+                            <label class="configurator__screen-form-field">
+                                <div class="name">Телефонный номер</div>
+                                <input type="email" placeholder="+70000000000">
+                            </label>
+                        </form>
+                        <div class="configurator__screen-form-capture">
+                            Вводя данные своей учетной записи выше, я соглашаюсь, что со мной будут связываться по поводу продуктов Tesla, в том числе посредством автоматических звонков или текстовых сообщений. Это не условие покупки.
+                        </div>
                     </div>
                     <!-- Left side screens end -->
                     <div class="configurator__screen-right">
@@ -68,7 +119,7 @@
                                                     <input type="radio" name="selectedComplect" :value="complect.key" v-model="computedModel.complects.selected">
                                                     <div class="configurator__form-item_complect_in">
                                                         <div class="name">{{ complect.name }}</div>
-                                                        <div class="price">{{ complect.price }}</div>
+                                                        <div class="price">{{ complect.price }} €</div>
                                                     </div>
                                                 </label>
                                             </div>
@@ -91,19 +142,135 @@
                                                 {{computedModel.colors.items[computedModel.colors.selected].name}}
                                             </div>
                                             <div class="right">
-                                                {{computedModel.colors.items[computedModel.colors.selected].price}}
+                                                {{computedModel.colors.items[computedModel.colors.selected].price}} €
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="configurator__form-item configurator__form-item--rims">
+                                        <div class="configurator__form-item_title">Выберите колеса</div>
+                                        <div class="configurator__form-item_rims">
+                                            <label class="configurator__form-item_rim" v-for="rim in computedModel.rims.items" :key="rim.id">
+                                                <input type="radio" name="rim" :value="rim.id" v-model="computedModel.rims.selected">
+                                                <div class="rim">
+                                                    <img :src="rim.image" width="100%" alt="">
+                                                </div>
+                                            </label>
+                                        </div>
+                                        <div class="configurator__form-item_rim_name">
+                                            <div class="left">
+                                                {{computedModel.rims.items[computedModel.rims.selected].radius}}’’ диски {{computedModel.rims.items[computedModel.rims.selected].name}}
+                                            </div>
+                                            <div class="right">
+                                                {{computedModel.rims.items[computedModel.rims.selected].price}} €
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="configurator__form-top" v-show="curentStepIndex == 2">
+                                <div class="configurator__form-items">
+                                    <div class="configurator__form-item configurator__form-item--colors">
+                                        <div class="configurator__form-item_title">Выберите цвет автомобиля</div>
+                                        <div class="configurator__form-item_colors">
+                                            <label class="configurator__form-item_color" v-for="salon in computedModel.salons.items" :key="salon.id">
+                                                <input type="radio" name="salon" :value="salon.id" v-model="computedModel.salons.selected">
+                                                <div class="color" :style="`--color: ${salon.code};`"></div>
+                                            </label>
+                                        </div>
+                                        <div class="configurator__form-item_color_name">
+                                            <div class="left">
+                                                {{computedModel.salons.items[computedModel.salons.selected].name}}
+                                            </div>
+                                            <div class="right">
+                                                {{computedModel.salons.items[computedModel.salons.selected].price}} €
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="configurator__form-item" v-if="computedModel.seets">
+                                        <div class="configurator__form-item_fields">
+                                            <div class="configurator__form-item_field" v-for="seet in computedModel.seets.items" :key="seet.id">
+                                                <label class="configurator__form-item_complect">
+                                                    <input type="radio" name="selectedSeet" :value="seet.id" v-model="computedModel.seets.selected">
+                                                    <div class="configurator__form-item_complect_in">
+                                                        <div class="name">{{ seet.name }}</div>
+                                                        <div class="price">{{ seet.price }} €</div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="configurator__form-top" v-show="curentStepIndex == 3">
+                                <div class="configurator__form-items">
+                                    <div class="configurator__form-item">
+                                        <div class="configurator__form-item_title">Базовый автопилот: включен</div>
+                                        <div class="configurator__form-item_fields">
+                                            <div class="text">Позволяет электромобилю держать полосу, регулировать скорость и автоматически тормозить перед другими электромобилями и пешеходами</div>
+                                        </div>
+                                    </div>
+                                    <div class="configurator__form-item" v-for="autopilot in computedModel.autopilot.items" :key="autopilot.id" v-if="autopilot.id > 0">
+                                        <div class="configurator__form-item_title">{{ autopilot.name }}</div>
+                                        <div class="configurator__form-item_fields">
+                                            <div class="configurator__form-item_field" >
+                                                <label class="configurator__form-item_complect">
+                                                    <input type="radio" name="selectedAutopilot" :value="autopilot.id" v-model="computedModel.autopilot.selected">
+                                                    <div class="configurator__form-item_complect_in">
+                                                        <div class="name">Добавить опцию</div>
+                                                        <div class="price">{{ autopilot.price }} €</div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="configurator__form-top" v-show="curentStepIndex == 4">
+                                <div class="configurator__form-total">
+                                    <div class="configurator__form-total-title">Ваша новая {{ computedModel.name }}</div>
+                                    <div class="configurator__form-total-image">
+                                        <img :src="`/images/models/tesla-${selectedModelKey}-${computedModel.colors.items[computedModel.colors.selected].prefix}-${computedModel.rims.items[computedModel.rims.selected].radius}.jpg`" width="100%" alt="">
+                                    </div>
+                                    <div class="configurator__form-total-list">
+                                        <div class="configurator__form-total-list-item">
+                                            {{ computedComplect.name }}
+                                        </div>
+                                        <div class="configurator__form-total-list-item">
+                                            {{ computedModel.colors.items[computedModel.colors.selected].name }}
+                                        </div>
+                                        <div class="configurator__form-total-list-item">
+                                            {{ computedModel.rims.items[computedModel.rims.selected].name }}
+                                        </div>
+                                        <div class="configurator__form-total-list-item">
+                                            {{ computedModel.salons.items[computedModel.salons.selected].name }}
+                                        </div>
+                                        <div class="configurator__form-total-list-item" v-if="computedModel.seets">
+                                            {{ computedModel.seets.items[computedModel.seets.selected].name }}
+                                        </div>
+                                        <div class="configurator__form-total-list-item">
+                                            {{ computedModel.autopilot.items[computedModel.autopilot.selected].name }}
+                                        </div>
+                                    </div>
+                                    <div class="configurator__form-total-price">
+                                        {{ totalPrice }} €
+                                    </div>
+                                </div>
+                            </div>
                             <!-- Right side screens end -->
-                            <div class="configurator__form-bottom">
-                                <button class="configurator__form-button configurator__button configurator__button--outlined configurator__button--back" v-if="curentStepIndex > 0" @click.prevent="prevStep">
+                            <div class="configurator__form-bottom" >
+                                <button class="configurator__form-button configurator__button configurator__button--outlined configurator__button--back" v-if="curentStepIndex > 0 && curentStepIndex < 4" @click.prevent="prevStep">
                                     <div class="text">Назад</div>
                                  </button>
-                                 <button class="configurator__form-button configurator__button" @click.prevent="nextStep">
+                                 <button class="configurator__form-button configurator__button" @click.prevent="nextStep" v-if="curentStepIndex < 4">
                                     <div class="text">Продолжить</div>
+                                    <div class="arrow">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 10 11" fill="none">
+                                            <path d="M7.94141 5.94141C8.18555 5.69727 8.18555 5.30078 7.94141 5.05664L4.19141 1.30664C3.94727 1.0625 3.55078 1.0625 3.30664 1.30664C3.0625 1.55078 3.0625 1.94727 3.30664 2.19141L6.61523 5.5L3.30859 8.80859C3.06445 9.05273 3.06445 9.44922 3.30859 9.69336C3.55273 9.9375 3.94922 9.9375 4.19336 9.69336L7.94336 5.94336L7.94141 5.94141Z" fill="white"/>
+                                        </svg>
+                                    </div>
+                                 </button>
+                                 <button class="configurator__form-button configurator__button" @click.prevent="sendForm" v-if="curentStepIndex == 4">
+                                    <div class="text">Оставить заявку</div>
                                     <div class="arrow">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 10 11" fill="none">
                                             <path d="M7.94141 5.94141C8.18555 5.69727 8.18555 5.30078 7.94141 5.05664L4.19141 1.30664C3.94727 1.0625 3.55078 1.0625 3.30664 1.30664C3.0625 1.55078 3.0625 1.94727 3.30664 2.19141L6.61523 5.5L3.30859 8.80859C3.06445 9.05273 3.06445 9.44922 3.30859 9.69336C3.55273 9.9375 3.94922 9.9375 4.19336 9.69336L7.94336 5.94336L7.94141 5.94141Z" fill="white"/>
